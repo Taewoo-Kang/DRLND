@@ -60,7 +60,11 @@ class Agent():
         self.t_step = (self.t_step + 1) % UPDATE_EVERY
         if self.t_step == 0:
             # If enough samples are available in memory, get random subset and learn
-            if len(self.memory) > BATCH_SIZE:
+            if self.memory_mode == 'PER':
+                n_entries = self.memory.n_entries
+            else:
+                n_entries = len(self.memory)
+            if n_entries > BATCH_SIZE:
                 if self.memory_mode == 'PER':
                     self.idx, priorities, w, experiences = self.memory.retrieve_experience(BATCH_SIZE)
                     experiences = self.to_tensor(experiences)
